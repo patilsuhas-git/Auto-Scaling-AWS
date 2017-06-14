@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+         crossorigin="anonymous"></script>
+      <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
+      <title>Gallery - CC6331</title>
+      <!-- Bootstrap core CSS -->
+      <link href="./static/css/bootstrap.min.css" rel="stylesheet">
+      <!-- Custom styles for this template -->
+      <link href="./static/css/commentpage.css" rel="stylesheet">
+      <link href="./static/css/album.css" rel="stylesheet">
+   </head>
+   <body>
+      <div class="album text-muted">
+      <div class="container">
+         <div class="row">
+               <div class="card filter ">
+                  <img
+                     alt="100%x280"
+                     src="{{picture_path}}"
+                     data-holder-rendered="true"
+                     style="height: 280px; width: 100%; display: block;">
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="detailBox">
+         <div class="titleBox">
+            <label>Comment Box</label>
+         </div>
+         <div class="actionBox">
+            {% if result == 'null' %}
+            <form class="form-inline" role="form">
+               <div class="form-group">
+                  <input class="form-control" type="text" placeholder="Your comments" />
+               </div>
+               <div class="form-group">
+                  <button class="btn btn-default Add">Add</button>
+               </div>
+            </form>
+            {% else %}
+            {% for it in result %}
+            <ul class="commentList">
+               <li>
+                  <div class="commentText">
+                     <p class="p">{{ it[3] }}</p>
+                  </div>
+               </li>
+            </ul>
+            {% endfor %}
+            <form class="form-inline" role="form">
+               <div class="form-group">
+                  <input class="form-control" type="text" placeholder="Your comments" />
+               </div>
+               <div class="form-group">
+                  <button class="btn btn-default Add">Add</button>
+               </div>
+            </form>
+            {% endif %}
+         </div>
+      </div>
+   </body>
+   <script>
+        $(document).ready(function(){
+            $('.Add').click(function(event){
+            	 event.preventDefault();
+                 var comment = $('input').val();
+                 if(comment != '') {
+                     $.ajax({
+                        type: "POST",
+                        url: "{{ url_for('comment_insert') }}",
+                        data: JSON.stringify(comment),
+                        // userid:JSON.stringify(user_id),
+                        contentType: "application/json;charset=UTF-8",
+                        success: function(result) {
+                                window.location.href = "{{ url_for('comment_pic') }}"
+                        },
+                        error: function(error) {
+                            console.log("There seems to be an error in the data you passed!");
+                        }
+                    });
+                } else {
+                    console.log('Enter Value');
+                }
+
+            });
+        })
+   </script>
+</html>

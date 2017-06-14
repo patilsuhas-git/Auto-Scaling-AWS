@@ -1,0 +1,26 @@
+Setting Up Database
+
+Creating Database :
+create database Auto_Scale_CC;
+
+Creating authentication table :
+create table auth_table(ID int PRIMARY KEY AUTO_INCREMENT, name varchar(50), email varchar(100), user_name varchar(50), passwd varchar(50));
+
+Creating table for storing picture in database.
+create table pictures (ID int PRIMARY KEY AUTO_INCREMENT, user_id VARCHAR(50), image_path varchar(255), image_name varchar(50) not null default '');
+
+Creating tables for strong and recording comments on a picture.
+create table picture_comment(ID int PRIMARY KEY AUTO_INCREMENT, picture_id INT, user_id INT, comment TEXT(65535));
+
+----
+
+For setting environment for flask app.
+
+1. Install Mysql Connector.
+    a.Download mysql connector from https://pypi.python.org/pypi/mysql-connector-python-rf
+    b.Move the tar to ec2 instance.
+        scp -i yourkey.pem localmachinepath ubuntu@ec2 / path on ec2 machine.
+    c. Run command to unpackage.
+        tar -zxvf mysql-connector-python-rf-2.2.2.tar.gz
+    d. Run command to install.
+        python setup.py install

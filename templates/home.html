@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://v4-alpha.getbootstrap.com/examples/album/ -->
+<html lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+      <link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico">
+      <title>Gallery - CC6331</title>
+      <!-- Bootstrap core CSS -->
+      <link href="./static/css/bootstrap.min.css" rel="stylesheet">
+      <!-- Custom styles for this template -->
+      <link href="./static/css/album.css" rel="stylesheet">
+      <style type="text/css">
+         :root #content > #right > .dose > .dosesingle,
+         :root #content > #center > .dose > .dosesingle
+         { display: none !important; }
+      <style>
+         .btn-file {
+         position: relative;
+         overflow: hidden;
+         }
+         .btn-file input[type=file] {
+         position: absolute;
+         top: 0;
+         right: 0;
+         min-width: 100%;
+         min-height: 100%;
+         font-size: 100px;
+         text-align: right;
+         filter: alpha(opacity=0);
+         opacity: 0;
+         outline: none;
+         background: white;
+         cursor: inherit;
+         display: block;
+         }
+      </style>
+   </head>
+   <body>
+      <div class="navbar navbar-inverse bg-inverse">
+         <div class="container d-flex justify-content-between">
+            <a href="#" class="navbar-brand">Gallery - AWS Auto Scaling</a>
+            <a class="nav-link" href="{{ url_for('upload_image') }}">Upload an image</a>
+         </div>
+      </div>
+      <div style="margin-left: 38%;">
+          <!-- <button type="button" style="margin-top:1%; width:18%" class="btn btn-primary filter-button">All</button>
+          <button type="button" style="margin-top:1%; width:18%"  class="btn btn-primary filter-button ">Your Upload</button> -->
+          <button style="margin-top:1%; width:18%" class="btn btn-primary filter-button active" data-filter="all">All</button>
+          <button style="margin-top:1%; width:18%" class="btn btn-primary filter-button" data-filter="{{current_user_name}}"> Your Upload</button>
+      </div>
+      <div class="album text-muted">
+         <div class="container">
+            <div class="row">
+               {% for i in result %}
+               {% if i[1] == current_user %}
+               <div class="card filter {{current_user_name}}"  picture_id={{i[0]}} userid={{i[1]}} user_name={{i[6]}}>
+                   {%else%}
+                <div class="card filter "  picture_id={{i[0]}} userid={{i[1]}} user_name={{i[6]}}>
+                {%endif%}
+                  <img
+                     alt="100%x280"
+                     src={{i[2]}}
+                     data-holder-rendered="true"
+                     style="height: 280px; width: 100%; display: block;">
+                  {% if i[1] == current_user %}
+                  <button type="button" class="btn btn-primary deletebtn">Delete</button>
+                  {%endif%}
+                  <button type="button" style="margin-top:1%; "class="btn btn-primary commentbtn">Comment</button>
+               </div>
+               {%endfor%}
+            </div>
+         </div>
+      </div>
+      <!-- Bootstrap core JavaScript
+         ================================================== -->
+      <!-- Placed at the end of the document so the pages load faster -->
+      <!-- <script src="./static/js/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script> -->
+      <script src="./static/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+      <script src="./static/js/holder.min.js"></script>
+      <script>
+         $(function () {
+           Holder.addTheme("thumb", { background: "#55595c", foreground: "#eceeef", text: "Thumbnail" });
+         });
+      </script>
+      <script src="./static/js/bootstrap.min.js"></script>
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <script src="./static/js/ie10-viewport-bug-workaround.js"></script>
+      <svg xmlns="http://www.w3.org/2000/svg"
+         width="356"
+         height="280"
+         viewBox="0 0 356 280"
+         preserveAspectRatio="none"
+         style="display: none; visibility: hidden; position: absolute; top: -100%; left: -100%;">
+         <defs>
+            <style type="text/css">
+            </style>
+         </defs>
+         <text x="0"
+            y="18"
+            style="font-weight:bold;font-size:18pt;font-family:Arial, Helvetica, Open Sans, sans-serif">356x280</text>
+      </svg>
+   </body>
+   <script>
+   $(document).ready(function(){
+       $(".filter-button").click(function(){
+           var value = $(this).attr('data-filter');
+           console.log(value);
+           if(value == "all") {
+               $('.filter').show('1000');
+           }
+           else {
+               $(".filter").not('.'+value).hide('3000');
+               $('.filter').filter('.'+value).show('3000');
+           }
+       });
+
+       $(".deletebtn").click(function() {
+           var  picture_id = $(this).parent().closest('div').attr('picture_id');
+           $.ajax({
+                type: "POST",
+                url: "{{ url_for('delete_picture') }}",
+                data: JSON.stringify(picture_id),
+                contentType: "application/json;charset=UTF-8",
+                success: function(result) {
+                        window.location.href = '{{ url_for('show_gallery') }}'
+                },
+                error: function(error) {
+                    console.log("There seems to be an error in the data you passed!");
+                }
+            });
+       });
+       $('.commentbtn').click(function(){
+            console.log('comment clicked');
+        	var picture_id = $(this).parent().closest('div').attr('picture_id');
+            var user_id = $(this).parent().closest('div').attr('picture_id');
+            var json_data = {
+                                'picture_id':picture_id,
+                                'fromGallery' : 'true'
+                            }
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('comment_pic') }}",
+                data: JSON.stringify(json_data),
+                // userid:JSON.stringify(user_id),
+                contentType: "application/json;charset=UTF-8",
+                success: function(result) {
+                        window.location.href = "{{ url_for('comment_pic') }}"
+                },
+                error: function(error) {
+                    console.log("There seems to be an error in the data you passed!");
+                }
+            });
+        });
+    //    $(".commentbtn").click(function() {
+    //        var  picture_id = $(this).parent().closest('div').attr('picture_id');
+    //        $.ajax({
+    //             type: "POST",
+    //             url: "{{ url_for('delete_picture') }}",
+    //             data: JSON.stringify(picture_id),
+    //             contentType: "application/json;charset=UTF-8",
+    //             success: function(result) {
+    //                     window.location.href = '{{ url_for('show_gallery') }}'
+    //             },
+    //             error: function(error) {
+    //                 console.log("There seems to be an error in the data you passed!");
+    //             }
+    //         });
+    //    });
+    });
+   </script>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+         crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+         integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+         crossorigin="anonymous">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+         integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+         crossorigin="anonymous"></script>
+      <!-- Website CSS style -->
+      <link rel="stylesheet" type="text/css" href="/static/css/homepage.css">
+      <!-- Website Font style -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+      <!-- Google Fonts -->
+      <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+      <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+      <title>Gallery</title>
+   </head>
+   <body>
+      <section>
+      <div class="container">
+         <div class="row">
+            <div class="gallery col-lg-12 col-md-12 col-sm-12 col-xs-12">
+               <h1 class="gallery-title">Gallery</h1>
+            </div>
+            <div align="center">
+               <button class="btn btn-default filter-button active" data-filter="all">All</button>
+               <button class="btn btn-default filter-button" data-filter="hdpe">Your Upload</button>
+            </div>
+            <br/>
+            {% for i in filepath %}
+                <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter hdpe">
+                    <img src={{i}} class="img-responsive">
+                </div>
+            {% endfor %}
+         </div>
+      </div>
+  </section>
+   </body>
+   <script>
+   $(document).ready(function(){
+        $(".filter-button").click(function(){
+            var value = $(this).attr('data-filter');
+            console.log(value);
+            if(value == "all") {
+                $('.filter').show('1000');
+            }
+            else {
+                $(".filter").not('.'+value).hide('3000');
+                $('.filter').filter('.'+value).show('3000');
+            }
+        });
+    });
+   </script>
+</html>
